@@ -10,7 +10,7 @@ function requireDependency(root, moduleName) {
   return require(path.join(root, 'node_modules', moduleName, main));
 }
 
-module.exports = Task.extend({ 
+module.exports = Task.extend({
   run: function (options) {
     const projectRoot = this.project.root;
     return new Promise((resolve) => {
@@ -24,6 +24,11 @@ module.exports = Task.extend({
 
       // Assign additional karmaConfig options to the local ngapp config
       options.configFile = karmaConfig;
+
+      // Enable single run if KARMA_SINGLE_RUN is set
+      if (process.env.KARMA_SINGLE_RUN) {
+        options.singleRun = true;
+      }
 
       // :shipit:
       const karmaServer = new karma.Server(options, resolve);
